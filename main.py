@@ -53,7 +53,7 @@ def index(state: State) -> Page:
 
 @route
 def home_page(state: State) -> Page:
-    """Display the BuildCalc home page and navigation."""
+    """Display the home page and navigation."""
     state.current_page = "Home"
 
     return Page(state, [
@@ -398,6 +398,16 @@ def clear_project(state: State) -> Page:
 
     return home_page(state)
 
+set_website_title("Project Cost Calculator")
+set_site_information(
+    author="Maximo Cordrey",
+    description="Estimate the cost of a small construction project.",
+    sources="Thanks to the Drafter docs, class resourses, and some help from LLMs.",
+    planning=["Copy of CS1 Final Project 1: Design(1).pdf", "Copy of CS1 Final Project 1: Design.pdf"],
+    links=["https://github.com/maximo-cordrey/Construction-Project-Cost-Estimator-Website"]
+)
+hide_debug_information()
+set_website_framed(False)
 
 # Start the Drafter website.
 start_server(
