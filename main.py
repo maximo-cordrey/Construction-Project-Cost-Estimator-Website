@@ -408,6 +408,156 @@ set_site_information(
 hide_debug_information()
 set_website_framed(False)
 
+#Unit Tests
+def run_tests():
+    # Test update_total_cost
+    state = State("Test Project", "Home", "", [], 0.0)
+
+    state.estimates.append(
+        Estimate("Concrete", 10, "cubic yards", 100, 1000)
+    )
+    state.estimates.append(
+        Estimate("Wood", 20, "pieces", 5, 100)
+    )
+
+    update_total_cost(state)
+    assert_equal(state.total_cost, 1100.0)
+
+    # Test add_estimate
+    state = State("Test Project", "Home", "", [], 0.0)
+
+    add_estimate(state, "Concrete", 10, "cubic yards", 100, 1000)
+
+    assert_equal(len(state.estimates), 1)
+    assert_equal(state.estimates[0].material_name, "Concrete")
+    assert_equal(state.estimates[0].total_cost, 1000)
+
+    # Test index
+    state = State("Test Project", "Home", "", [], 0.0)
+    result = index(state)
+    assert_equal(state.current_page, "Home")
+    assert_equal(type(result), Page)
+
+    # Test home_page
+    state = State("Test Project", "Home", "", [], 0.0)
+    result = home_page(state)
+    assert_equal(state.current_page, "Home")
+    assert_equal(type(result), Page)
+
+    # Test start_project
+    state = State("Old Project", "Home", "", [], 100.0)
+    state.estimates.append(
+        Estimate("Concrete", 10, "cubic yards", 10, 100)
+    )
+
+    result = start_project(state, "New Garage")
+
+    assert_equal(state.project_name, "New Garage")
+    assert_equal(len(state.estimates), 0)
+    assert_equal(state.total_cost, 0.0)
+    assert_equal(type(result), Page)
+
+    # Test concrete_page
+    state = State("Test Project", "Home", "", [], 0.0)
+    result = concrete_page(state)
+
+    assert_equal(state.current_page, "Concrete Calculator")
+    assert_equal(type(result), Page)
+
+    # Test save_concrete
+    state = State("Test Project", "Home", "", [], 0.0)
+    result = save_concrete(state, 27, 27, 1, 100)
+
+    assert_equal(len(state.estimates), 1)
+    assert_equal(type(result), Page)
+
+    # Test invalid concrete input
+    state = State("Test Project", "Home", "", [], 0.0)
+    result = save_concrete(state, -10, 10, 1, 100)
+
+    assert_equal(len(state.estimates), 0)
+    assert_equal(state.total_cost, 0.0)
+    assert_equal(type(result), Page)
+
+    # Test wood_page
+    state = State("Test Project", "Home", "", [], 0.0)
+    result = wood_page(state)
+
+    assert_equal(state.current_page, "Wood Calculator")
+    assert_equal(type(result), Page)
+
+    # Test save_wood
+    state = State("Test Project", "Home", "", [], 0.0)
+    result = save_wood(state, 16, 16, 8, "2x4", 5)
+
+    assert_equal(len(state.estimates), 1)
+    assert_equal(state.estimates[0].material_name, "Wood (2x4)")
+    assert_equal(type(result), Page)
+
+    # Test invalid wood input
+    state = State("Test Project", "Home", "", [], 0.0)
+    result = save_wood(state, 16, 16, 8, "2x4", -5)
+
+    assert_equal(len(state.estimates), 0)
+    assert_equal(state.total_cost, 0.0)
+    assert_equal(type(result), Page)
+
+    # Test workers_page
+    state = State("Test Project", "Home", "", [], 0.0)
+    result = workers_page(state)
+
+    assert_equal(state.current_page, "Workers Calculator")
+    assert_equal(type(result), Page)
+
+    # Test save_workers
+    state = State("Test Project", "Home", "", [], 0.0)
+    result = save_workers(state, 2, 8, 20)
+
+    assert_equal(len(state.estimates), 1)
+    assert_equal(state.estimates[0].quantity, 16)
+    assert_equal(state.estimates[0].total_cost, 320)
+    assert_equal(type(result), Page)
+
+    # Test invalid workers input
+    state = State("Test Project", "Home", "", [], 0.0)
+    result = save_workers(state, 0, 8, 20)
+
+    assert_equal(len(state.estimates), 0)
+    assert_equal(state.total_cost, 0.0)
+    assert_equal(type(result), Page)
+
+    # Test summary_page
+    state = State("Test Project", "Home", "", [], 0.0)
+
+    state.estimates.append(
+        Estimate("Concrete", 10, "cubic yards", 100, 1000)
+    )
+    state.estimates.append(
+        Estimate("Labor", 10, "worker-hours", 20, 200)
+    )
+
+    result = summary_page(state)
+
+    assert_equal(state.current_page, "Project Summary")
+    assert_equal(type(result), Page)
+
+    # Test clear_project
+    state = State("Old Project", "Project Summary", "", [], 500.0)
+    state.estimates.append(
+        Estimate("Concrete", 5, "cubic yards", 100, 500)
+    )
+
+    result = clear_project(state)
+
+    assert_equal(state.project_name, "New Construction Project")
+    assert_equal(state.current_page, "Home")
+    assert_equal(len(state.estimates), 0)
+    assert_equal(state.total_cost, 0.0)
+    assert_equal(type(result), Page)
+
+if __name__ == "__main__":
+    run_tests()
+
 # Start the Drafter website.
 start_server(
     State(
