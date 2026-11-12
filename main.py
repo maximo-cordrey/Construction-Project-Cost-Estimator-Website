@@ -403,7 +403,7 @@ set_site_information(
     author="Maximo Cordrey",
     description="Estimate the cost of a small construction project.",
     sources="Thanks to the Drafter docs, class resourses, and some help from LLMs.",
-    planning=["Copy of CS1 Final Project 1: Design(1).pdf", "Copy of CS1 Final Project 1: Design.pdf"],
+    planning=["Copy of CS1 Final Project 1: Design(1).pdf", "Copy of CS1 Final Project 1: Design.pdf", "LLM Conversations for CISC Project.pdf"],
     links=["https://github.com/maximo-cordrey/Construction-Project-Cost-Estimator-Website"]
 )
 hide_debug_information()
