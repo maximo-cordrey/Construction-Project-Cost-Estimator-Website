@@ -371,7 +371,6 @@ def summary_page(state: State) -> Page:
             content.append(
                 estimate.material_name
                 + ": "
-                + "#" * bar_length
                 + " $"
                 + str(round(estimate.total_cost, 2))
             )
